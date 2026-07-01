@@ -1,0 +1,11 @@
+patient_id,drug,fill_date,baseline_end,rule_used,ml_end,variance_days
+P001,Metformin,2024-01-01,2024-01-30,Explicit end date,2024-01-30,0
+P001,Metformin,2024-01-28,2024-02-24,Refill date (next fill - 1 day),2024-02-24,0
+P002,Lisinopril,2024-01-05,2024-01-31,Refill date (next fill - 1 day),2024-01-31,0
+P002,Lisinopril,2024-02-01,2024-03-02,Days supply calculation,2024-03-02,0
+P003,Amoxicillin,2024-03-10,2024-03-20,Days supply calculation,2024-03-20,0
+P004,Aspirin,2024-01-01,2024-02-14,Assumed end: Warfarin initiated,2024-02-14,0
+P004,Warfarin,2024-02-15,2024-03-16,Days supply calculation,2024-03-16,0
+P005,Atorvastatin,2024-01-01,2024-01-31,Refill date (next fill - 1 day),2024-01-31,0
+P005,Atorvastatin,2024-02-01,2024-03-02,Refill date (next fill - 1 day),2024-04-30,59
+P006,Sertraline,2024-04-01,2024-05-01,Default days supply (30 days),2024-05-07,6
