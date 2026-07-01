@@ -165,6 +165,4 @@ if __name__ == "__main__":
     for _, row in flagged.iterrows():
         print(f"  {row['patient_id']} / {row['drug']}: {row['flag']}")
 
-    # Save to CSV
-    results.to_csv("/mnt/user-data/outputs/prescription_exposure_results.csv", index=False)
-    print("\nResults saved to prescription_exposure_results.csv")
+    results.to_csv("prescription_exposure_results.csv", index=False)

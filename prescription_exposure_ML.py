@@ -91,16 +91,17 @@ def run_variance_analysis():
     max_error = comparison_df["variance_days"].abs().max()
     avg_error = comparison_df["variance_days"].abs().mean()
 
-    print(f"📊 Total Patient Files Analyzed      : {total_cases}")
-    print(f"⚠️ Files Miscalculated by Rules Engine: {divergent_cases} ({pct_impacted:.1f}%)")
-    print(f"🛑 Maximum Rule Operational Blindspot: {max_error} Days")
-    print(f"📉 Average Rule Calculation Skew     : {avg_error:.1f} Days per file")
-    print("="*100)
+    print(f"Total Patient Files Analyzed      : {total_cases}")
+    print(f"Files Miscalculated by Rules Engine: {divergent_cases} ({pct_impacted:.1f}%)")
+    print(f"Maximum Rule Operational Blindspot: {max_error} Days")
+    print(f"Average Rule Calculation Skew     : {avg_error:.1f} Days per file")
+    print(f"Variance analysis exported")
+
 
     # Save to a single clean analysis file for visualization tools or Excel pivot tables
     output_name = "POC_Executive_Variance_Analysis.csv"
     comparison_df.to_csv(output_name, index=False)
-    print(f"📈 Strategic variance database exported to: {output_name}\n")
+    print(f"Strategic variance database exported")
 
 if __name__ == "__main__":
     run_variance_analysis()
