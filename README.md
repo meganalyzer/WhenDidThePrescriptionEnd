@@ -1,6 +1,6 @@
 # When Did the Prescription End?
 
-A comparison of two approaches to one of the most quietly frustrating problems in real-world drug exposure analysis.
+A comparison of three approaches to one of the most quietly frustrating problems in real-world drug exposure analysis.
 
 ---
 
@@ -20,9 +20,7 @@ And how you infer it changes your cohort, your exposure windows, and potentially
 
 ---
 
-## Two Approaches
-
-This repo compares two ways of solving the problem:
+## Three Approaches
 
 ### 1. Rules-Based Pipeline (`prescription_exposure.py`)
 
@@ -37,11 +35,49 @@ Clean, auditable, explainable. You can trace exactly why any record got the end 
 
 The limitation: rigid math applied to human behavior creates blind spots. A 90-day gap between refills looks the same as a discontinuation. A patient who stretched their medication gets cut off at Day 30. A new drug not in your interaction dictionary breaks your logic silently.
 
+---
+
 ### 2. ML Comparison (`prescription_exposure_ML.py`)
 
-An XGBoost regressor that learns patterns from the data — drug class, adherence history, fill seasonality — and infers exposure windows probabilistically rather than deterministically.
+A side-by-side comparison of rule-based outputs versus manually constructed expected ML outputs — designed to illustrate where the two approaches diverge and why.
 
-It handles edge cases the rules engine misses. It adapts to new drugs without manual dictionary updates. It captures behavioral patterns like medication stretching.
+This file demonstrates the structural cases where rules fail before committing to a full ML implementation.
+
+---
+
+### 3. XGBoost Model (`prescription_exposure_XGBoost.py`)
+
+A real trained model.
+
+**Training strategy:** Use high-confidence rule-based records — where explicit end dates or clean refill data exist — as labeled ground truth. The model learns from cases where we know the answer, then predicts end dates for the ambiguous cases where rules break down.
+
+This is methodologically defensible. You are not asking the model to invent ground truth. You are using your most reliable records to teach it, then applying what it learned to the harder cases.
+
+**Features the model learns from:**
+- Days supply
+- Drug class
+- Fill month (seasonality)
+- Whether the drug is chronic or acute
+- Historical adherence ratio
+- Number of prior fills
+- Presence of an interacting drug
+
+**Why XGBoost specifically:** It handles mixed data types and missing values natively, does not require perfectly clean input, and produces feature importance scores — so when it shifts an exposure window, you can see which signals drove that decision. In a clinical context where "the model said so" is not a defensible answer, explainability matters.
+
+---
+
+## Results
+
+| Metric | Result |
+|--------|--------|
+| Patients in synthetic dataset | 50 |
+| Training set | High-confidence records only |
+| Overall MAE | 4.0 days |
+| High-confidence record MAE | 2.4 days |
+| Low-confidence record MAE | 6.7 days |
+| Records flagged for human review (>7 day error) | 9.3% |
+
+A 4-day average error on drug exposure windows is meaningful at population scale. The 9.3% of records flagged for review are candidates for exclusion from studies or manual pharmacist audit rather than inclusion with uncertain dates.
 
 ---
 
@@ -49,40 +85,49 @@ It handles edge cases the rules engine misses. It adapts to new drugs without ma
 
 ML is not a free upgrade.
 
-In research and clinical contexts, precision and explainability are not optional. When a model shifts an exposure window by 59 days, the question is not just whether it is right — it is whether you can prove why it made that decision, and whether a regulator or a reviewer will accept that answer.
+Even with feature importance, the model is learning from statistical patterns that are real but not always reducible to simple clinical logic. In research and regulatory contexts, that matters.
 
-Sometimes the honest answer is: we cannot fully explain it. The model learned from patterns that are real but complex, and the math is not simple.
+In practice, records where the model's confidence falls below a threshold often get removed from studies entirely rather than included with uncertain exposure dates. That is a legitimate, defensible choice — but it is worth knowing that ML can increase the number of excluded records rather than reduce overall uncertainty.
 
-In practice, records where the model's confidence falls below a threshold often get removed from studies entirely rather than included with uncertain exposure dates. That is a legitimate, defensible choice — but it is worth knowing that ML can increase the number of excluded records rather than reduce uncertainty.
-
-The right answer depends on your study design, your regulatory context, and how much ambiguity you can defensibly carry.
-
----
-
-## What This Repo Shows
-
-| Metric | Result |
-|--------|--------|
-| Total patient records analyzed | 10 |
-| Records where rules and ML disagreed | 2 (20%) |
-| Largest exposure window difference | 59 days |
-| Average difference | 6.5 days per record |
-
-A 59-day difference in assumed exposure is not a rounding error in a drug safety or comparative effectiveness study. It is a cohort inclusion decision.
+The right approach depends on your study design, your regulatory context, and how much ambiguity you can defensibly carry.
 
 ---
 
 ## Running It
 
+Install dependencies:
+
 ```bash
-pip install pandas numpy xgboost
-python3 prescription_exposure.py
-python3 prescription_exposure_ML.py
+pip install pandas numpy xgboost scikit-learn
 ```
 
-Outputs:
-- `prescription_exposure_results.csv` — rules-based end dates with method and flags
-- `POC_Executive_Variance_Analysis.csv` — side-by-side comparison with variance
+Mac users — if XGBoost fails on install:
+
+```bash
+brew install libomp
+```
+
+Run each approach:
+
+```bash
+python3 prescription_exposure.py
+python3 prescription_exposure_ML.py
+python3 prescription_exposure_XGBoost.py
+```
+
+---
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `prescription_exposure.py` | Rule-based pipeline — priority logic for end date estimation |
+| `prescription_exposure_ML.py` | Simulated ML comparison — illustrates where rules diverge from probabilistic outputs |
+| `prescription_exposure_XGBoost.py` | Real trained XGBoost model with feature engineering and validation |
+| `prescription_exposure_results.csv` | Rules-based output with method and flags per record |
+| `POC_Executive_Variance_Analysis.csv` | Side-by-side rules vs ML variance |
+| `prescription_exposure_XGBoost_results.csv` | Full XGBoost predictions with true vs predicted dates and errors |
+| `ML_APPROACH.md` | Detailed methodology and patient scenario walkthrough |
 
 ---
 
