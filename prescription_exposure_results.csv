@@ -1,0 +1,11 @@
+patient_id,drug,drug_class,fill_date,estimated_end_date,method,flag
+P001,Metformin,Biguanide,2024-01-01,2024-01-30,Explicit end date,—
+P001,Metformin,Biguanide,2024-01-28,2024-02-24,Refill date (next fill - 1 day),—
+P002,Lisinopril,ACE Inhibitor,2024-01-05,2024-01-31,Refill date (next fill - 1 day),—
+P002,Lisinopril,ACE Inhibitor,2024-02-01,2024-03-02,Days supply calculation,—
+P003,Amoxicillin,Antibiotic,2024-03-10,2024-03-20,Days supply calculation,—
+P004,Aspirin,Antiplatelet,2024-01-01,2024-03-31,Days supply calculation,—
+P004,Warfarin,Anticoagulant,2024-02-15,2024-03-16,Days supply calculation,—
+P005,Atorvastatin,Statin,2024-01-01,2024-01-31,Refill date (next fill - 1 day),—
+P005,Atorvastatin,Statin,2024-02-01,2024-04-30,Refill date (next fill - 1 day),Gap of 90 days exceeds days supply + grace period — possible discontinuation then restart
+P006,Sertraline,SSRI,2024-04-01,2024-05-01,Default days supply (30 days) — no other signal,"Low confidence — no end date, refill, days supply, or interaction signal available"
