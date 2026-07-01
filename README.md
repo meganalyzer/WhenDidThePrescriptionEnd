@@ -94,7 +94,7 @@ All patient data in this repo is synthetic. No real patient records were used.
 
 ## Author
 
-**Megha Sharma** — Clinical Data Engineer, Life Sciences  
+**Megha Sharma** 
 [LinkedIn](https://linkedin.com/in/meghasharma0892) | [GitHub](https://github.com/meganalyzer)
 
 Building real-world evidence infrastructure for pharma and academic research.
