@@ -81,7 +81,7 @@ A 4-day average error on drug exposure windows is meaningful at population scale
 
 ---
 
-## The Honest Tradeoff
+## The Tradeoff
 
 ML is not a free upgrade.
 
