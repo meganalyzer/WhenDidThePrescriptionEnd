@@ -1,0 +1,5 @@
+model,mae_days,rmse_days,cv_mae_days,within_7d_pct,top_feature,top_feature_imp
+XGBoost,4.44,7.88,5.39,90.0,days_supply,0.8730000257492065
+Random Forest,4.81,9.14,4.53,90.0,days_supply,0.853
+Linear Regression,6.47,11.14,6.1,75.0,adherence_ratio,71.987
+Ridge Regression,6.16,11.99,6.46,80.0,adherence_ratio,44.481
