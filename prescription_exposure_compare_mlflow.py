@@ -65,7 +65,7 @@ MODEL_CONFIG = {
     },
 }
 
-GROQ_MODEL   = "llama3-70b-8192"
+GROQ_MODEL = "llama-3.3-70b-versatile"
 EXPERIMENT   = "prescription_exposure_comparison"
 FEATURE_COLS = [
     "days_supply", "drug_class_encoded", "fill_month",
